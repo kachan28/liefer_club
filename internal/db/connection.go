@@ -54,23 +54,6 @@ func (c *Connection) GetNiederlassung(table string, columns []string) (*models.N
 	return nieder, nil
 }
 
-func (c *Connection) GetMenu(tablesAndColumns map[string][]string) (*models.Menu, error) {
-	var q string
-	menu := new(models.Menu)
-	for table, columns := range tablesAndColumns {
-		q = c.prepareQueryForSelect(table, columns)
-		rows, err := c.db.Query(q)
-		if err != nil {
-			return nil, err
-		}
-		fmt.Println(rows)
-		for rows.Next() {
-			fmt.Println(rows.Columns())
-		}
-	}
-	return menu, nil
-}
-
 func (c *Connection) prepareQueryForSelect(table string, columns []string) string {
 	columnsString := ""
 	for _, column := range columns {
@@ -80,4 +63,19 @@ func (c *Connection) prepareQueryForSelect(table string, columns []string) strin
 	lastColonIndex := strings.LastIndex(q, ",")
 	q = q[:lastColonIndex] + q[lastColonIndex+2:]
 	return q
+}
+
+func (c *Connection) prepareEntitiesCountQuery(column, table string, filter *string) string {
+	query := fmt.Sprintf("select count(%s) from %s", column, table)
+	if filter != nil {
+		query = c.prepareQuery(query, filter)
+	}
+	return query
+}
+
+func (c *Connection) prepareQuery(query string, filter *string) string {
+	if filter != nil {
+		query = fmt.Sprintf("%s where %s", query, *filter)
+	}
+	return query
 }

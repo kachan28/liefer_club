@@ -6,11 +6,10 @@ import (
 )
 
 type Menu struct {
-	ArtikelartikelNuuStIddeleted                        string `json:"artikelartikel_nuu_st_iddeleted"`
-	Artikelgroessepackungpreispfandaufschlag            string `json:"artikelgroessepackungpreispfandaufschlag"`
-	ArtGruppenOpValuesartGruppenOpValuesNuuStIddeleted  string `json:"art_gruppen_op_valuesart_gruppen_op_values_nuu_st_iddeleted"`
-	ArtGruppenOpValuesgroessepackungpreispfandaufschlag string `json:"art_gruppen_op_valuesgroessepackungpreispfandaufschlag"`
-	Groesse                                             string `json:"groesse"`
+	Name       string      `json:"menu name"`
+	Id         int64       `json:"menu id"`
+	Db         string      `json:"-"`
+	DishGroups []DishGroup `json:"dish groups"`
 }
 
 func (m *Menu) ScanField(column string, value string) {
