@@ -4,20 +4,30 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/kachan28/liefer_club/internal/models"
 )
 
 const (
-	protokolFolder = "LC-Kasse-Programmierprotokolle/JSON-Format"
+	protokolsFolder    = "LC-Kasse-Programmierprotokolle"
+	protokolMenuFolder = "JSON-Format"
+)
+
+var (
+	protokolPath = filepath.Join(protokolsFolder, protokolMenuFolder)
 )
 
 type FileService struct{}
 
 func (f FileService) WriteProtokol(result models.ResultModel) error {
-	if _, err := os.Stat(fmt.Sprintf("./%s", protokolFolder)); os.IsNotExist(err) {
-		err := os.Mkdir(fmt.Sprintf("%s", protokolFolder), 0755)
+	currPath, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+	if _, err := os.Stat(filepath.Join(currPath, protokolPath)); os.IsNotExist(err) {
+		err := os.Mkdir(protokolPath, 0755)
 		if err != nil {
 			return err
 		}
@@ -28,7 +38,7 @@ func (f FileService) WriteProtokol(result models.ResultModel) error {
 	}
 	protocolFileCreationTime := time.Now()
 	protocolFileName := fmt.Sprintf("%s_%s", result.Company.Name, protocolFileCreationTime.Format("2006.01.02 15:04:05"))
-	err = os.WriteFile(fmt.Sprintf("%s/%s.json", protokolFolder, protocolFileName), jsonResult, 0644)
+	err = os.WriteFile(filepath.Join(currPath, protokolPath, protocolFileName)+".json", jsonResult, 0644)
 	if err != nil {
 		return err
 	}
