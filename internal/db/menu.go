@@ -68,7 +68,8 @@ func (c *Connection) GetDishGroups(menu *models.Menu) error {
 		return err
 	}
 	menu.DishGroups = make([]models.DishGroup, dishGroupsCount)
-	rows, err := c.db.Query(getDishGroupsQuery)
+	filter := "komplex_art_id IS NOT NULL"
+	rows, err := c.db.Query(c.prepareQuery(getDishGroupsQuery, &filter))
 	for rows.Next() {
 		rows.Scan(&menu.DishGroups[dishGroupIndex].Name, &menu.DishGroups[dishGroupIndex].ID)
 		dishGroupIndex++
