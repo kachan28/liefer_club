@@ -137,6 +137,9 @@ func (c *Connection) GetDishPrices() (map[int64][]models.DishPrice, error) {
 	}
 	filter := fmt.Sprintf("%s.groesse is null", dishToPricesTable)
 	dishPricesWithoutSizesRows, err := c.db.Query(c.prepareQuery(getDishToPricesWithoutSizesQuery, &filter))
+	if err != nil {
+		return nil, err
+	}
 	for dishPricesWithoutSizesRows.Next() {
 		dishPrice := models.DishPrice{}
 		err = dishPricesWithoutSizesRows.Scan(&dishID, &dishPrice.Price)
