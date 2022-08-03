@@ -39,6 +39,14 @@ func (g GetMenuService) GetMenu(menuDbName string, conf *app.Conf) (*models.Menu
 	if err != nil {
 		return nil, err
 	}
+	err = conn.GetSideDishGroups(menu)
+	if err != nil {
+		return nil, err
+	}
+	err = conn.GetSideDishes(menu.SideDishGroups)
+	if err != nil {
+		return nil, err
+	}
 	err = conn.CloseConnection()
 	if err != nil {
 		return nil, err

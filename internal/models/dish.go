@@ -3,7 +3,7 @@ package models
 type DishGroup struct {
 	Name   string `json:"dish group name"`
 	ID     int64  `json:"dish group id"`
-	Dishes []Dish `json:"dishes"`
+	Dishes []Dish `json:"dishes,omitempty"`
 }
 
 type Dish struct {
@@ -12,7 +12,7 @@ type Dish struct {
 	Number     string      `json:"dish number"`
 	UStId      int64       `json:"-"`
 	TaxValue   int64       `json:"dish tax value"`
-	DishPrices []DishPrice `json:"dish prices"`
+	DishPrices []DishPrice `json:"dish prices,omitempty"`
 }
 
 type DishPrice struct {
