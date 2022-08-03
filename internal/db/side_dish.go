@@ -30,7 +30,7 @@ var (
 		sideDishesTable, sideDishesTable,
 		sideDishGroupToSideDishTable,
 	)
-	getSideDishToPricesQuery = fmt.Sprintf(
+	getSideDishToPricesWithSizesQuery = fmt.Sprintf(
 		"select "+
 			"%s.art_gruppen_op_values, "+
 			"%s.groesse, "+
@@ -45,6 +45,15 @@ var (
 		sideDishToPricesTable, sideDishToPricesTable, sideDishToPricesTable, sideDishToPricesTable,
 		sideDishesPricesTable, sideDishesPricesTable,
 		sideDishToPricesTable, sideDishToPricesTable,
+	)
+	getSideDishToPriceWitoutSizesQuery = fmt.Sprintf(
+		"select "+
+			"%s.art_gruppen_op_values, "+
+			"%s.preis "+
+			"from %s",
+		sideDishToPricesTable,
+		sideDishToPricesTable,
+		sideDishToPricesTable,
 	)
 )
 
@@ -111,15 +120,34 @@ func (c *Connection) GetSideDishes(sideDishGroups []models.SideDishGroup) error 
 }
 
 func (c *Connection) GetSideDishPrices() (map[int64][]models.SideDishPrice, error) {
-	sideDishPricesRows, err := c.db.Query(getSideDishToPricesQuery)
+	sideDishPricesWithSizesRows, err := c.db.Query(getSideDishToPricesWithSizesQuery)
 	if err != nil {
 		return nil, err
 	}
 	sideDishToPriceList := make(map[int64][]models.SideDishPrice, 0)
 	var sideDishID int64
-	for sideDishPricesRows.Next() {
+	for sideDishPricesWithSizesRows.Next() {
 		sideDishPrice := models.SideDishPrice{}
-		err = sideDishPricesRows.Scan(&sideDishID, &sideDishPrice.SizeOrPackage, &sideDishPrice.SizeOrPackageId, &sideDishPrice.Price, &sideDishPrice.BottleDepositFee)
+		err = sideDishPricesWithSizesRows.Scan(&sideDishID, &sideDishPrice.SizeOrPackage, &sideDishPrice.SizeOrPackageId, &sideDishPrice.Price, &sideDishPrice.BottleDepositFee)
+		if err != nil {
+			return nil, err
+		}
+		if _, ok := sideDishToPriceList[sideDishID]; !ok {
+			sideDishToPriceList[sideDishID] = make([]models.SideDishPrice, 0)
+		}
+		sideDishToPriceList[sideDishID] = append(sideDishToPriceList[sideDishID], sideDishPrice)
+	}
+	filter := fmt.Sprintf("%s.groesse is null", sideDishToPricesTable)
+	sideDishPricesWithoutSizesRows, err := c.db.Query(c.prepareQuery(getSideDishToPriceWitoutSizesQuery, &filter))
+	if err != nil {
+		return nil, err
+	}
+	for sideDishPricesWithoutSizesRows.Next() {
+		sideDishPrice := models.SideDishPrice{}
+		err = sideDishPricesWithoutSizesRows.Scan(&sideDishID, &sideDishPrice.Price)
+		if err != nil {
+			return nil, err
+		}
 		if _, ok := sideDishToPriceList[sideDishID]; !ok {
 			sideDishToPriceList[sideDishID] = make([]models.SideDishPrice, 0)
 		}

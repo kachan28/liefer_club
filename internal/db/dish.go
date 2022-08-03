@@ -31,7 +31,7 @@ var (
 		dishesTable, dishesTable,
 		dishGroupToDishTable,
 	)
-	getDishToPricesQuery = fmt.Sprintf(
+	getDishToPricesWithSizesQuery = fmt.Sprintf(
 		"select "+
 			"%s.artikel, "+
 			"%s.groesse, "+
@@ -46,6 +46,15 @@ var (
 		dishToPricesTable, dishToPricesTable, dishToPricesTable, dishToPricesTable,
 		pricesTable, pricesTable,
 		dishToPricesTable, dishToPricesTable,
+	)
+	getDishToPricesWithoutSizesQuery = fmt.Sprintf(
+		"select "+
+			"%s.artikel, "+
+			"%s.preis "+
+			"from %s ",
+		dishToPricesTable,
+		dishToPricesTable,
+		dishToPricesTable,
 	)
 )
 
@@ -109,15 +118,31 @@ func (c *Connection) GetDishes(dishGroups []models.DishGroup) error {
 }
 
 func (c *Connection) GetDishPrices() (map[int64][]models.DishPrice, error) {
-	dishPricesRows, err := c.db.Query(getDishToPricesQuery)
+	dishPricesWithSizesRows, err := c.db.Query(getDishToPricesWithSizesQuery)
 	if err != nil {
 		return nil, err
 	}
 	dishToPriceList := make(map[int64][]models.DishPrice, 0)
 	var dishID int64
-	for dishPricesRows.Next() {
+	for dishPricesWithSizesRows.Next() {
 		dishPrice := models.DishPrice{}
-		err = dishPricesRows.Scan(&dishID, &dishPrice.SizeOrPackage, &dishPrice.SizeOrPackageId, &dishPrice.Price, &dishPrice.BottleDepositFee)
+		err = dishPricesWithSizesRows.Scan(&dishID, &dishPrice.SizeOrPackage, &dishPrice.SizeOrPackageId, &dishPrice.Price, &dishPrice.BottleDepositFee)
+		if err != nil {
+			return nil, err
+		}
+		if _, ok := dishToPriceList[dishID]; !ok {
+			dishToPriceList[dishID] = make([]models.DishPrice, 0)
+		}
+		dishToPriceList[dishID] = append(dishToPriceList[dishID], dishPrice)
+	}
+	filter := fmt.Sprintf("%s.groesse is null", dishToPricesTable)
+	dishPricesWithoutSizesRows, err := c.db.Query(c.prepareQuery(getDishToPricesWithoutSizesQuery, &filter))
+	for dishPricesWithoutSizesRows.Next() {
+		dishPrice := models.DishPrice{}
+		err = dishPricesWithoutSizesRows.Scan(&dishID, &dishPrice.Price)
+		if err != nil {
+			return nil, err
+		}
 		if _, ok := dishToPriceList[dishID]; !ok {
 			dishToPriceList[dishID] = make([]models.DishPrice, 0)
 		}

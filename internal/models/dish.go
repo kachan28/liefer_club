@@ -16,8 +16,8 @@ type Dish struct {
 }
 
 type DishPrice struct {
-	SizeOrPackage    string  `json:"dish size or package"`
-	SizeOrPackageId  int64   `json:"dish size or package id"`
-	Price            float64 `json:"dish price"`
-	BottleDepositFee float64 `json:"bottle deposit fee"`
+	SizeOrPackage    *string  `json:"dish size or package,omitempty"`
+	SizeOrPackageId  *int64   `json:"dish size or package id,omitempty"`
+	Price            *float64 `json:"dish price,omitempty"`
+	BottleDepositFee *float64 `json:"bottle deposit fee,omitempty"`
 }
