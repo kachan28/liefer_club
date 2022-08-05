@@ -47,6 +47,16 @@ func (g GetMenuService) GetMenu(menuDbName string, conf *app.Conf) (*models.Menu
 	if err != nil {
 		return nil, err
 	}
+	//todo уточнить у Акима, почему массив
+	menu.SpecialOffersAndSetMenus = make([]models.SpecialOfferAndSetMenu, 1)
+	err = conn.GetComponents(menu)
+	if err != nil {
+		return nil, err
+	}
+	err = conn.GetOffers(menu)
+	if err != nil {
+		return nil, err
+	}
 	err = conn.CloseConnection()
 	if err != nil {
 		return nil, err

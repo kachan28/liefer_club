@@ -7,5 +7,5 @@ type FirmaBas struct {
 	HausNr      string `json:"company house number"`
 	Plz         string `json:"plz"`
 	Ort         string `json:"ort"`
-	Bilanrierer string `json:"bilanrierer"`
+	Bilanrierer string `json:"bilanzierer"`
 }
