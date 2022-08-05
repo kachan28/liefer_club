@@ -6,7 +6,6 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 
 	"github.com/kachan28/liefer_club/internal/models"
 )
@@ -40,12 +39,12 @@ func (f FileService) WriteProtokol(result models.ResultModel) error {
 		return err
 	}
 
-	protocolFileCreationTime, err := time.Parse("2006-01-02 15:04:05", result.CreationDate)
+	dt, err := result.GetCreationTimeForFile()
 	if err != nil {
 		return err
 	}
 
-	protocolFileName := fmt.Sprintf("%s_%s", strings.ReplaceAll(result.Company.Name, " ", "_"), protocolFileCreationTime.Format("2006.01.02_15-04-05"))
+	protocolFileName := fmt.Sprintf("%s_%s", strings.ReplaceAll(result.Company.Name, " ", "_"), dt)
 	err = os.WriteFile(filepath.Join(absoluteProgramPath, protocolFileName)+".json", jsonResult, 0644)
 	if err != nil {
 		return err

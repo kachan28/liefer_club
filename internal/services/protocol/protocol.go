@@ -2,7 +2,6 @@ package protocol
 
 import (
 	"strings"
-	"time"
 
 	"github.com/kachan28/liefer_club/app"
 	"github.com/kachan28/liefer_club/internal/db"
@@ -89,7 +88,7 @@ func (p *protocolService) MakeProtocol(conf *app.Conf) error {
 		}
 	}
 
-	result.CreationDate = time.Now().Format("2006-01-02 15:04:05")
+	result.SetCreationTime()
 	err = file.FileService{}.WriteProtokol(result)
 	if err != nil {
 		return err
