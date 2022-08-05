@@ -39,7 +39,11 @@ func (f FileService) WriteProtokol(result models.ResultModel) error {
 	if err != nil {
 		return err
 	}
-	protocolFileCreationTime := time.Now()
+
+	protocolFileCreationTime, err := time.Parse("2006-01-02 15:04:05", result.CreationDate)
+	if err != nil {
+		return err
+	}
 
 	protocolFileName := fmt.Sprintf("%s_%s", strings.ReplaceAll(result.Company.Name, " ", "_"), protocolFileCreationTime.Format("2006.01.02_15-04-05"))
 	err = os.WriteFile(filepath.Join(absoluteProgramPath, protocolFileName)+".json", jsonResult, 0644)

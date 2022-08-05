@@ -2,6 +2,7 @@ package protocol
 
 import (
 	"strings"
+	"time"
 
 	"github.com/kachan28/liefer_club/app"
 	"github.com/kachan28/liefer_club/internal/db"
@@ -15,15 +16,8 @@ import (
 const (
 	menuDBName = "firma_pizzanova_db_menu"
 	//firma tables
-	firmaBasTable         = "firma_bas"
-	niederLassungBasTable = "niederlassung_bas"
-	//menu tables
-	ArtikelBas                               = "artikel_bas"
-	ArtikelGroessePackungPreisDat            = "artikel_groesse_packung_preis_dat"
-	ArtGruppenOpValuesBas                    = "art_gruppen_op_values_bas"
-	ArtGruppenOpValuesGroessePackungPreisDat = "art_gruppen_op_values_groesse_packung_preis_dat"
-	ArtikelAllowedGroesseDat                 = "artikel_allowed_groesse_dat"
-	OptionsAllowedGroesseDat                 = "options_allowed_groesse_dat"
+	companyTable = "firma_bas"
+	branchTable  = "niederlassung_bas"
 )
 
 type protocolService struct{}
@@ -35,7 +29,7 @@ func MakeProtocolService() *protocolService {
 var (
 	dbsAndValues = map[string]map[string][]string{
 		services.FirmaPizzaNovaDBName: {
-			firmaBasTable: {
+			companyTable: {
 				"name",
 				"steuer_nr",
 				"strasse",
@@ -44,47 +38,13 @@ var (
 				"ort",
 				"bilanzierer",
 			},
-			niederLassungBasTable: {
+			branchTable: {
 				"niederlassung",
 				"vat_id",
 				"strasse",
 				"haus_nu",
 				"plz",
 				"ort",
-			},
-		},
-		menuDBName: {
-			ArtikelBas: {
-				"artikel",
-				"artikel_nu",
-				"u_st_id",
-				"deleted",
-			},
-			ArtikelGroessePackungPreisDat: {
-				"artikel",
-				"groesse",
-				"packung",
-				"preis",
-				"pfandaufschlag",
-			},
-			ArtGruppenOpValuesBas: {
-				"art_gruppen_op_values",
-				"art_gruppen_op_values_nu",
-				"u_st_id",
-				"deleted",
-			},
-			ArtGruppenOpValuesGroessePackungPreisDat: {
-				"art_gruppen_op_values",
-				"groesse",
-				"packung",
-				"preis",
-				"pfandaufschlag",
-			},
-			ArtikelAllowedGroesseDat: {
-				"groesse",
-			},
-			OptionsAllowedGroesseDat: {
-				"groesse",
 			},
 		},
 	}
@@ -105,11 +65,11 @@ func (p *protocolService) MakeProtocol(conf *app.Conf) error {
 			if err != nil {
 				return err
 			}
-			firma, err := conn.GetFirma(firmaBasTable, dbsAndValues[services.FirmaPizzaNovaDBName][firmaBasTable])
+			firma, err := conn.GetFirma(companyTable, dbsAndValues[services.FirmaPizzaNovaDBName][companyTable])
 			if err != nil {
 				return err
 			}
-			nieder, err := conn.GetNiederlassung(niederLassungBasTable, dbsAndValues[services.FirmaPizzaNovaDBName][niederLassungBasTable])
+			nieder, err := conn.GetNiederlassung(branchTable, dbsAndValues[services.FirmaPizzaNovaDBName][branchTable])
 			if err != nil {
 				return err
 			}
@@ -129,6 +89,7 @@ func (p *protocolService) MakeProtocol(conf *app.Conf) error {
 		}
 	}
 
+	result.CreationDate = time.Now().Format("2006-01-02 15:04:05")
 	err = file.FileService{}.WriteProtokol(result)
 	if err != nil {
 		return err
