@@ -64,11 +64,11 @@ func (p *protocolService) MakeProtocol(conf *app.Conf) error {
 			if err != nil {
 				return err
 			}
-			firma, err := conn.GetFirma(companyTable, dbsAndValues[services.FirmaPizzaNovaDBName][companyTable])
+			firma, err := conn.GetCompany(companyTable, dbsAndValues[services.FirmaPizzaNovaDBName][companyTable])
 			if err != nil {
 				return err
 			}
-			nieder, err := conn.GetNiederlassung(branchTable, dbsAndValues[services.FirmaPizzaNovaDBName][branchTable])
+			nieder, err := conn.GetBranch(branchTable, dbsAndValues[services.FirmaPizzaNovaDBName][branchTable])
 			if err != nil {
 				return err
 			}

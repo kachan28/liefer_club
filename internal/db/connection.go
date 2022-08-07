@@ -7,7 +7,6 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/kachan28/liefer_club/app"
-	"github.com/kachan28/liefer_club/internal/models"
 )
 
 type Connection struct {
@@ -30,28 +29,6 @@ func MakeConnection(conf *app.Conf, database string) (*Connection, error) {
 
 func (c *Connection) CloseConnection() error {
 	return c.db.Close()
-}
-
-func (c *Connection) GetFirma(table string, columns []string) (*models.FirmaBas, error) {
-	q := c.prepareQueryForSelect(table, columns)
-	res := c.db.QueryRow(q)
-	firma := new(models.FirmaBas)
-	err := res.Scan(&firma.Name, &firma.SteuerNr, &firma.Strasse, &firma.HausNr, &firma.Plz, &firma.Ort, &firma.Bilanrierer)
-	if err != nil {
-		return nil, err
-	}
-	return firma, nil
-}
-
-func (c *Connection) GetNiederlassung(table string, columns []string) (*models.NiederLassung, error) {
-	q := c.prepareQueryForSelect(table, columns)
-	res := c.db.QueryRow(q)
-	nieder := new(models.NiederLassung)
-	err := res.Scan(&nieder.Niederlassung, &nieder.VatId, &nieder.Strasse, &nieder.HausNu, &nieder.Plz, &nieder.Ort)
-	if err != nil {
-		return nil, err
-	}
-	return nieder, nil
 }
 
 func (c *Connection) prepareQueryForSelect(table string, columns []string) string {

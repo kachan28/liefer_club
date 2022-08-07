@@ -1,27 +1,24 @@
 package models
 
-import "time"
-
-const (
-	formatForProtocol = "2006-01-02 15:04:05"
-	formatForFile     = "2006.01.02_15-04-05"
+import (
+	timeService "github.com/kachan28/liefer_club/internal/services/time"
 )
 
 type ResultModel struct {
-	CreationDate string         `json:"creation date"`
-	Company      *FirmaBas      `json:"company,omitempty"`
-	Branch       *NiederLassung `json:"branch,omitempty"`
-	Menus        []*Menu        `json:"menus,omitempty"`
+	CreationDate string   `json:"creation date"`
+	Company      *Company `json:"company,omitempty"`
+	Branch       *Branch  `json:"branch,omitempty"`
+	Menus        []*Menu  `json:"menus,omitempty"`
 }
 
 func (r *ResultModel) SetCreationTime() {
-	r.CreationDate = time.Now().Format(formatForProtocol)
+	r.CreationDate = timeService.TimeService{}.GetTimeForProtocol()
 }
 
 func (r *ResultModel) GetCreationTimeForFile() (string, error) {
-	protocolFileCreationTime, err := time.Parse(formatForProtocol, r.CreationDate)
+	dt, err := timeService.TimeService{}.GetCreationTimeForFile(r.CreationDate)
 	if err != nil {
 		return "", err
 	}
-	return protocolFileCreationTime.Format(formatForFile), nil
+	return dt, err
 }

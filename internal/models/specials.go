@@ -1,5 +1,7 @@
 package models
 
+import "fmt"
+
 type SpecialOfferAndSetMenu struct {
 	Components []Component `json:"components of special offers and menus"`
 	Offers     []Offer     `json:"special offers and menus dishes"`
@@ -32,4 +34,22 @@ type Offer struct {
 
 type DishComponent struct {
 	ComponentName string `json:"component name"`
+}
+
+func (c Component) ToString() string {
+	return fmt.Sprintf(
+		"%s: Nr. - %s; Ergänzungsprinzip - %s; Anzahl - %d; Bezahlte Anzahl - %d; Preisprinzip - %s; Preis/Reduziert - %.2f; Rabatt in Prozent - %.2f",
+		c.ComponentName, c.ComponentNumber, c.ConfiguringPrinciple,
+		c.Quantity, c.PaidQuantity, c.PricingPrinciple,
+		c.PriceOrDiscount, c.PercentageDiscount,
+	)
+}
+
+func (o Offer) ToString() string {
+	return fmt.Sprintf(
+		"%s: Nr. - %s; Ergänzungsprinzip - %s; Anzahl - %d; Bezahlte Anzahl - %d; Preisprinzip - %s; Preis/Reduziert - %.2f; Rabatt in Prozent - %.2f",
+		o.DishName, o.DishNumber, o.ConfiguringPrinciple,
+		o.Quantity, o.PaidQuantity, o.PricingPrinciple,
+		o.PriceOrDiscount, o.PercentageDiscount,
+	)
 }

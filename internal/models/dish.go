@@ -1,5 +1,9 @@
 package models
 
+import (
+	"fmt"
+)
+
 type DishGroup struct {
 	Name   string `json:"dish group name"`
 	ID     int64  `json:"dish group id"`
@@ -20,4 +24,20 @@ type DishPrice struct {
 	SizeOrPackageId  *int64   `json:"dish size or package id,omitempty"`
 	Price            *float64 `json:"dish price,omitempty"`
 	BottleDepositFee *float64 `json:"bottle deposit fee,omitempty"`
+}
+
+func (d Dish) ToString() string {
+	return fmt.Sprintf("%s: Nr. - %s; MwSt. - %d; Preis - %s", d.Name, d.Number, d.TaxValue, d.pricesToString())
+}
+
+func (d Dish) pricesToString() string {
+	pricesString := ""
+	for _, price := range d.DishPrices {
+		if price.SizeOrPackage != nil {
+			pricesString += *price.SizeOrPackage + " - "
+		}
+		pricesString += fmt.Sprintf("%.2f€", *price.Price)
+		pricesString += "; "
+	}
+	return pricesString
 }
