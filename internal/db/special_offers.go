@@ -20,7 +20,7 @@ var (
 			"%s.komplex_artikel, "+
 			"%s.id, "+
 			"%s.komplex_artikel_nu, "+
-			"%s.komplettieren_prinzip, "+
+			"%s.label, "+
 			"%s.item_menge, "+
 			"%s.bezahlt_menge, "+
 			"%s.preis_prinzip, "+

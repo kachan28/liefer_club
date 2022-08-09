@@ -7,6 +7,7 @@ import (
 )
 
 const (
+	sideDishNotDeleted           = 1
 	sideDishGroupsTable          = "art_gruppen_options_bas"
 	sideDishGroupToSideDishTable = "`art_gruppen-art_gruppen_options_rel`"
 	sideDishesTable              = "art_gruppen_op_values_bas"
@@ -88,11 +89,11 @@ func (c *Connection) GetSideDishes(sideDishGroups []models.SideDishGroup) error 
 		}
 		sideDishGroups[sideDishGroupIndex].SideDishes = make([]models.SideDish, sideDishesCount)
 		sideDishIndex := 0
-		filter = fmt.Sprintf("%s.id=%d and %s.kosten_politik is not null", sideDishesTable, sideDishGroups[sideDishGroupIndex].ID, sideDishGroupToSideDishTable)
+		filter = fmt.Sprintf("%s.id=%d and %s.kosten_politik is not null and %s.deleted=%d", sideDishesTable, sideDishGroups[sideDishGroupIndex].ID, sideDishGroupToSideDishTable, sideDishesTable, sideDishNotDeleted)
 		getQuery := c.prepareQuery(getSideDishesBySideDishGroupQuery, &filter)
 		sideDishesRows, err := c.db.Query(getQuery)
 		if err != nil {
-			return err
+			panic(err)
 		}
 		for sideDishesRows.Next() {
 			err = sideDishesRows.Scan(

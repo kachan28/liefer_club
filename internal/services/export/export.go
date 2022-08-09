@@ -19,7 +19,11 @@ func (e ExportService) ExportToPdf() error {
 	if err != nil {
 		return err
 	}
-	err = CreatePdfProtocol{}.CreatePdfFile(*result, *exportConfig, "pdfs/example.pdf")
+	exportDir, err := file.FileService{}.GetExportDirectory()
+	if err != nil {
+		return nil
+	}
+	err = CreatePdfProtocol{}.CreatePdfFile(*result, *exportConfig, file.FileService{}.SetFullExportFilename(exportDir, protocolTitle))
 	if err != nil {
 		return err
 	}

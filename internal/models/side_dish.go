@@ -25,7 +25,7 @@ type SideDishPrice struct {
 }
 
 func (s SideDish) ToString() string {
-	return fmt.Sprintf("%s: Nr. - %s; MwSt. - %d; Preis - %s", s.Name, s.Number, s.TaxValue, s.pricesToString())
+	return fmt.Sprintf("%s: Nr. - %s; MwSt. - %d%%; Preis - %s", s.Name, s.Number, s.TaxValue, s.pricesToString())
 }
 
 func (s SideDish) pricesToString() string {
@@ -35,7 +35,9 @@ func (s SideDish) pricesToString() string {
 			pricesString += *price.SizeOrPackage + " - "
 		}
 		pricesString += fmt.Sprintf("%.2f€", *price.Price)
-		pricesString += "; "
+		if price.BottleDepositFee != nil {
+			pricesString += fmt.Sprintf(", Pfand - %.2f; ", *price.BottleDepositFee)
+		}
 	}
 	return pricesString
 }

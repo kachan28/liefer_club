@@ -17,6 +17,7 @@ const (
 	programmFilesFolder = "LC-Kasse-Programmierprotokolle"
 	protokolMenuFolder  = "JSON-Format"
 	jsonFormat          = ".json"
+	pdfFormat           = ".pdf"
 )
 
 var (
@@ -102,4 +103,16 @@ func (f FileService) ReadProtocol(protocolFileName string) (*models.ResultModel,
 		return nil, err
 	}
 	return result, nil
+}
+
+func (f FileService) GetExportDirectory() (string, error) {
+	currPath, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(currPath, programmFilesFolder), nil
+}
+
+func (f FileService) SetFullExportFilename(folderPath, fileName string) string {
+	return filepath.Join(folderPath, fileName) + pdfFormat
 }

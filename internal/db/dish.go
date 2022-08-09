@@ -8,6 +8,7 @@ import (
 )
 
 const (
+	dishNotDeleted       = 0
 	dishGroupsTable      = "art_gruppen_bas"
 	dishGroupToDishTable = "`artikel-art_gruppen_rel`"
 	dishesTable          = "artikel_bas"
@@ -90,6 +91,7 @@ func (c *Connection) GetDishes(dishGroups []models.DishGroup) error {
 		}
 		dishGroups[dishGroupIndex].Dishes = make([]models.Dish, dishesCount)
 		dishIndex := 0
+		filter += fmt.Sprintf(" and %s.deleted=%d", dishesTable, dishNotDeleted)
 		getQuery := c.prepareQuery(getDishesByDishGroupQuery, &filter)
 		dishesRows, err := c.db.Query(getQuery)
 		if err != nil {

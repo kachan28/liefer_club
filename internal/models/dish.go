@@ -27,7 +27,7 @@ type DishPrice struct {
 }
 
 func (d Dish) ToString() string {
-	return fmt.Sprintf("%s: Nr. - %s; MwSt. - %d; Preis - %s", d.Name, d.Number, d.TaxValue, d.pricesToString())
+	return fmt.Sprintf("%s: Nr. - %s; MwSt. - %d%%; Preis - %s", d.Name, d.Number, d.TaxValue, d.pricesToString())
 }
 
 func (d Dish) pricesToString() string {
@@ -37,7 +37,10 @@ func (d Dish) pricesToString() string {
 			pricesString += *price.SizeOrPackage + " - "
 		}
 		pricesString += fmt.Sprintf("%.2f€", *price.Price)
-		pricesString += "; "
+		pricesString += ", "
+		if price.BottleDepositFee != nil {
+			pricesString += fmt.Sprintf("Pfand - %.2f; ", *price.BottleDepositFee)
+		}
 	}
 	return pricesString
 }

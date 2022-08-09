@@ -38,7 +38,7 @@
           "type": "object",
           "properties":{
             "label": {
-              "de": "Company address"
+              "de": "Geschäftsadresse"
             },
             "text-align": "left",
             "value": "company address",
@@ -100,7 +100,7 @@
           "type": "object",
           "properties":{
             "label": {
-              "de": "Branch Address"
+              "de": "Adresse der Filiale"
             },
             "value": "branch address",
             "float": "left",
