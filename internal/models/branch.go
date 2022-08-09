@@ -2,7 +2,7 @@ package models
 
 type Branch struct {
 	Name    string        `json:"branch name"`
-	Id      string        `json:"branch id"`
+	Id      int64         `json:"branch id"`
 	Address BranchAddress `json:"branch adress"`
 	// TaxNumber string        `json:"branch tax number"`
 }

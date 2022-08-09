@@ -39,7 +39,7 @@ var (
 			},
 			branchTable: {
 				"niederlassung",
-				"vat_id",
+				"id",
 				"strasse",
 				"haus_nu",
 				"plz",

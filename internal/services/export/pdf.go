@@ -8,6 +8,7 @@ import (
 	"github.com/johnfercher/maroto/pkg/pdf"
 	"github.com/johnfercher/maroto/pkg/props"
 	"github.com/kachan28/liefer_club/internal/models"
+	branchService "github.com/kachan28/liefer_club/internal/services/branch"
 	timeService "github.com/kachan28/liefer_club/internal/services/time"
 )
 
@@ -37,20 +38,28 @@ func (create CreatePdfProtocol) CreatePdfFile(result models.ResultModel, exportC
 	return nil
 }
 
-func (create CreatePdfProtocol) buildHeading(m pdf.Maroto, result models.ResultModel, exportConfig models.ExportConfig) {
+func (create CreatePdfProtocol) buildHeading(m pdf.Maroto, result models.ResultModel, exportConfig models.ExportConfig) error {
 	create.buildHeader1(m, result.Company.Name, result.CreationDate, exportConfig)
 	create.buildDivider(m)()
 	create.buildHeader2(m, result.Company.Address.PrepareAddressForExport(), exportConfig)
 	create.buildHeader3(m, result.Company.TaxNumber, exportConfig)
-	create.buildHeader4(m, result.Company.TypeOfTaxation, exportConfig)
+	create.buildHeader4(m, result.Company.TypeOfTaxationToString(), exportConfig)
 	create.buildDivider(m)()
-	create.buildHeader5(m, result.Branch.Name, exportConfig)
-	create.buildHeader7(m, result.Branch.Address.PrepareAddressForExport(), exportConfig)
-	create.buildDivider(m)()
+	//check branch for not head
+	isHead, err := branchService.CheckHeadBranch{}.BranchIsHead(result.Branch.Id)
+	if err != nil {
+		return err
+	}
+	if !isHead {
+		create.buildHeader5(m, result.Branch.Name, exportConfig)
+		create.buildHeader7(m, result.Branch.Address.PrepareAddressForExport(), exportConfig)
+		create.buildDivider(m)()
+	}
 	for _, menu := range result.Menus {
 		create.buildMenuBlock(m, *menu, exportConfig)
 		create.buildDivider(m)()
 	}
+	return nil
 }
 
 func (create CreatePdfProtocol) buildHeader1(m pdf.Maroto, companyName, creationDate string, exportConfig models.ExportConfig) {
