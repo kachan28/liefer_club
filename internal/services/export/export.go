@@ -6,7 +6,7 @@ import (
 
 type ExportService struct{}
 
-func (e ExportService) ExportToPdf() error {
+func (e ExportService) ExportToPdf(exportLang string) error {
 	exportConfig, err := GetExportConfigService{}.GetConfig()
 	if err != nil {
 		return err
@@ -23,7 +23,7 @@ func (e ExportService) ExportToPdf() error {
 	if err != nil {
 		return nil
 	}
-	err = CreatePdfProtocol{}.CreatePdfFile(*result, *exportConfig, file.FileService{}.SetFullExportFilename(exportDir, protocolTitle))
+	err = CreatePdfProtocol{}.CreatePdfFile(*result, *exportConfig, file.FileService{}.SetFullExportFilename(exportDir, protocolTitle), exportLang)
 	if err != nil {
 		return err
 	}
