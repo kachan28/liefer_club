@@ -1,0 +1,253 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Here must be $id - unique identifier for this schema. (URL or other link)",
+  "title": "Programming protocol report template",
+  "description": "Template for making the programming protocol dump-report in PDF-format from dump-report in JSON-format",
+  "type": "object",
+  "sections": {
+    "header section": {
+      "header-block-1": {
+        "type": "object",
+        "properties": {
+          "display": "inline",
+          "company name": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "de": "Geschäftsname"
+              },
+              "value": "company name",
+              "text-align": "left"
+            }
+          },
+          "report creation date": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "de": "Datum der Erstellung"
+              },
+              "value": "creation date",
+              "format": "dd.mm.yyyy",
+              "text-align": "write"
+            }
+          }
+        }
+      },
+      "header-block-2":{
+        "company address": {
+          "type": "object",
+          "properties":{
+            "label": {
+              "de": "Geschäftsadresse"
+            },
+            "text-align": "left",
+            "value": "company address",
+            "float": "left"
+          }
+        }
+      },
+      "header-block-3": {
+        "company tax number": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "de": "USt-IdNr."
+            },
+            "value": "company tax number",
+            "text-align": "left"
+          }
+        }
+      },
+      "header-block-4": {
+        "type of taxation": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "de": "Ist-/Soll-Verteuerung"
+            },
+            "value": "type of taxation",
+            "text-align": "left"
+          }
+        }
+      },
+      "header-block-5": {
+        "branch name": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "de": "Name der Filiale"
+            },
+            "value": "branch name",
+            "text-align": "left"
+          }
+        }
+      },
+
+      "header-block-6": {
+        "branch tax number": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "de": "USt-IdNr."
+            },
+            "value": "branch tax number",
+            "text-align": "left"
+          }
+        }
+      },
+      "header-block-7":{
+        "branch address": {
+          "type": "object",
+          "properties":{
+            "label": {
+              "de": "Adresse der Filiale"
+            },
+            "value": "branch address",
+            "float": "left",
+            "text-align": "left"
+          }
+        }
+      }
+
+    },
+
+
+    "menu section": {
+
+      "menu block 1":{
+        "menu name": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "de": "Speisekarte"
+            },
+            "value": "menu name",
+            "text-align": "left"
+          }
+        }
+      },
+
+      "menu block 2":{
+        "type": "string",
+        "properties": {
+          "label": {
+            "de": "Gerichte (Artikel)"
+          },
+          "float": "left"
+        }
+      },
+      "menu block 3":{
+        "dish group": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "de": "Artikelgruppe"
+            },
+            "value": "dish group name",
+            "text-align": "left"
+          }
+        }
+      },
+
+      "menu block 4": {
+        "dish": {
+          "type": "object",
+          "properties": {
+            "display": "inline",
+            "text-align": "left",
+            "dish template de": "dish_name':' 'Nr. -' dish_number';' 'MwSt. -' dish_tax_value'%'';' 'Preis -' dish_size_or_package '-' dish_preis'&curren'';' 'Pfand' '-' bottle_deposit_fee'&curren'';'... dish_size_or_package '-' dish_preis'&curren'';' 'Pfand' '-' bottle_deposit_fee''&curren'",
+            "dish example for food 1": "Pizza Bomba Scharf: Nr. – 5s; MwSt. - 7%; Preis - 22 cm – 5,00€; 28 cm – 6,50€; 32 cm – 9,50€; 40 cm – 9,50€",
+            "dish example for food 2": "Spagetti: Nr. - 41; MwSt. - 7%; Preis - 7,00€",
+            "dish example for drink": "Fanta: Nr. – 700f; MwSt. - 19%; Preis - 0,33l – 1,50€; Pfand – 0,25€; 1l – 2,35€; Pfand – 0,15€"
+          }
+        }
+      },
+
+      "menu block 5":{
+          "type": "string",
+          "properties": {
+            "label": {
+              "de": "Zutaten und andere Optionen"
+             },
+            "float": "left"
+          }
+      },
+      "menu block 6":{
+        "sideDish group": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "de": "Zutat- Optionen-Gruppe"
+            },
+            "value": "dish group name",
+            "text-align": "left"
+          }
+        }
+      },
+
+      "menu block 7": {
+        "sideDish": {
+          "type": "object",
+          "properties": {
+            "display": "inline",
+            "text-align": "left",
+            "sideDish template": "sideDish_name':' 'Nr. -' sideDish_number';' 'MwSt. -' sideDish_tax_value'%'';' 'Preis -' sideDish_size_or_package '-' sideDish_preis'&curren'';' 'Pfand' '-' bottle_deposit_fee'&curren'';'... sideDish_size_or_package '-' sideDish_preis'&curren'';' 'Pfand' '-' bottle_deposit_fee''&curren'",
+            "sideDish example for food without bottle deposit": "Parmesan: Nr. – ; MwSt. - 7%; Preis - 22 cm – 0,85€; 28 cm – 1,00€; 32 cm – 1,50€; 40 cm – 2,50€",
+            "sideDish example for food with bottle deposit": "Old Brandy Dip: Nr. – ; MwSt. - 19%;  Preis - 5,00€; Pfand – 0,25€"
+          }
+        }
+      },
+
+      "menu block 8":{
+        "type": "string",
+        "properties": {
+          "label": {
+            "de": "Sonderangebote und Tagesmenüs"
+          },
+          "float": "left"
+        }
+      },
+      "menu block 9":{
+        "type": "string",
+        "properties": {
+          "label": {
+            "de": "Sonderangebot-Komponenten"
+          },
+          "float": "left"
+        }
+      },
+
+      "menu block 10": {
+        "component": {
+          "type": "object",
+          "properties": {
+            "display": "inline",
+            "text-align": "left",
+            "component template de": "component_name':' 'Nr. -' component_number';' 'Ergänzungsprinzip -' configuring_principle';' 'Anzahl' '-' quantity';' 'Bezahlte Anzahl' '-' paid_quantity';' 'Preisprinzip' '-' pricing_principle';' 'Preis/Reduziert' '-' price_or_discount';' 'Rabatt in Prozent' '-' percentage_discount",
+            "component example": "Classic Burger: Nr. – ; ; Ergänzungsprinzip - N-Mal gleichen Artikel oder Komponente; Anzahl - 2; Preisprinzip - Standard Preis für jeden Artikel"
+          }
+        }
+      },
+      "menu block 11":{
+        "type": "string",
+        "properties": {
+          "label": {
+            "de": "Sonderangebote und Tagesmenüs"
+          },
+          "float": "left"
+        }
+      },
+      "menu block 12": {
+        "special offers and menus dish": {
+          "type": "object",
+          "properties": {
+            "display": "inline",
+            "text-align": "left",
+            "component template de": "dish_name':' 'Nr. -' dish_number';' 'Ergänzungsprinzip -' configuring principle';' 'Anzahl' '-' quantity';' 'Bezahlte Anzahl' '-' paid_quantity';' 'Preisprinzip' '-' pricing_principle';' 'Preis/Reduziert' '-' price_or_discount';' 'Rabatt in Prozent' '-' percentage_discount",
+            "component example": "Only You: Nr. – O2; ; Ergänzungsprinzip - Alle Artikel oder Komponenten von gewählte; Preisprinzip - Fixed Preis für ganzes Sonderangebot; Preis/Reduziert - 8,90€"
+          }
+        }
+      }
+    }
+  }
+}
