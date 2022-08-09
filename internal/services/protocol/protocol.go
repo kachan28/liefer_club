@@ -1,6 +1,7 @@
 package protocol
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/kachan28/liefer_club/app"
@@ -10,6 +11,7 @@ import (
 	"github.com/kachan28/liefer_club/internal/services/file"
 	menuService "github.com/kachan28/liefer_club/internal/services/menu"
 	"github.com/kachan28/liefer_club/internal/services/tax"
+	timeService "github.com/kachan28/liefer_club/internal/services/time"
 )
 
 const (
@@ -80,6 +82,18 @@ func (p *protocolService) MakeProtocol(conf *app.Conf) error {
 			}
 		}
 		if strings.Contains(dbName.Name, menuDBName) {
+			_, createTime, err := file.FileService{}.GetLastProtocol()
+			if err != nil {
+				return err
+			}
+			updateDt, err := timeService.TimeService{}.GetUpdateDatabaseDtFromCsv(dbName.UpdateDt)
+			if err != nil {
+				return err
+			}
+			if updateDt.Before(createTime) {
+				fmt.Printf("Skip database %s \n", dbName.Name)
+				continue
+			}
 			menu, err := menuService.GetMenuService{}.GetMenu(dbName.Name, conf)
 			if err != nil {
 				return err

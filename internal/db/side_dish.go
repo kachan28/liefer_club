@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	sideDishNotDeleted           = 1
+	sideDishNotDeleted           = 0
 	sideDishGroupsTable          = "art_gruppen_options_bas"
 	sideDishGroupToSideDishTable = "`art_gruppen-art_gruppen_options_rel`"
 	sideDishesTable              = "art_gruppen_op_values_bas"

@@ -35,7 +35,7 @@ func (s SideDish) pricesToString() string {
 			pricesString += *price.SizeOrPackage + " - "
 		}
 		pricesString += fmt.Sprintf("%.2f€", *price.Price)
-		if price.BottleDepositFee != nil {
+		if price.BottleDepositFee != nil && *price.BottleDepositFee != 0 {
 			pricesString += fmt.Sprintf(", Pfand - %.2f; ", *price.BottleDepositFee)
 		}
 	}

@@ -11,7 +11,7 @@ func (e ExportService) ExportToPdf() error {
 	if err != nil {
 		return err
 	}
-	protocolTitle, err := file.FileService{}.GetLastProtocol()
+	protocolTitle, _, err := file.FileService{}.GetLastProtocol()
 	if err != nil {
 		return err
 	}

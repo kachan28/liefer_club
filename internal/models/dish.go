@@ -38,7 +38,7 @@ func (d Dish) pricesToString() string {
 		}
 		pricesString += fmt.Sprintf("%.2f€", *price.Price)
 		pricesString += ", "
-		if price.BottleDepositFee != nil {
+		if price.BottleDepositFee != nil && *price.BottleDepositFee != 0 {
 			pricesString += fmt.Sprintf("Pfand - %.2f; ", *price.BottleDepositFee)
 		}
 	}

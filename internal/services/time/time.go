@@ -7,7 +7,8 @@ import (
 const (
 	formatForProtocol = "2006-01-02 15:04:05"
 	formatForFile     = "2006.01.02_15-04-05"
-	formatForExport   = "02.01.2006"
+	formatForExport   = "15:04:05 02.01.2006"
+	formatForCsv      = "2006.01.02_15-04-05"
 )
 
 type TimeService struct{}
@@ -38,4 +39,12 @@ func (t TimeService) GetDateStringForExport(creationTime string) (string, error)
 		return "", err
 	}
 	return protocolFileCreationTime.Format(formatForExport), nil
+}
+
+func (t TimeService) GetUpdateDatabaseDtFromCsv(creationTime string) (time.Time, error) {
+	dbUpdateDt, err := time.Parse(formatForCsv, creationTime)
+	if err != nil {
+		return time.Time{}, err
+	}
+	return dbUpdateDt, nil
 }

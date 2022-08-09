@@ -58,17 +58,17 @@ func (f FileService) WriteProtokol(result models.ResultModel) error {
 	return err
 }
 
-func (f FileService) GetLastProtocol() (string, error) {
+func (f FileService) GetLastProtocol() (string, time.Time, error) {
 	currPath, err := os.Getwd()
 	if err != nil {
-		return "", err
+		return "", time.Time{}, err
 	}
 	files, err := ioutil.ReadDir(filepath.Join(currPath, protokolPath))
 	if err != nil {
-		return "", err
+		return "", time.Time{}, err
 	}
 	if len(files) == 0 {
-		return "", fmt.Errorf("no files in json protocols folder")
+		return "", time.Time{}, fmt.Errorf("no files in json protocols folder")
 	}
 	var creationDt time.Time
 	var lastCreatedProtocolName string
@@ -77,14 +77,14 @@ func (f FileService) GetLastProtocol() (string, error) {
 		dateTimeAndFormat := strings.Split(fileName, ",")
 		dateTime, err := timeService.TimeService{}.GetTimeFromFileTitle(strings.Split(dateTimeAndFormat[1], jsonFormat)[0])
 		if err != nil {
-			return "", err
+			return "", time.Time{}, err
 		}
 		if dateTime.After(creationDt) {
 			creationDt = dateTime
 			lastCreatedProtocolName = fileName
 		}
 	}
-	return lastCreatedProtocolName, nil
+	return lastCreatedProtocolName, creationDt, nil
 }
 
 func (f FileService) ReadProtocol(protocolFileName string) (*models.ResultModel, error) {

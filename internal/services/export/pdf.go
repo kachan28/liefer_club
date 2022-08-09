@@ -79,7 +79,7 @@ func (create CreatePdfProtocol) buildHeader1(m pdf.Maroto, companyName, creation
 			})
 		})
 		m.Col(4, func() {
-			m.Col(3, func() {
+			m.Col(2, func() {
 				m.Text(exportConfig.Sections.Header.Header1.Properties.CreationDate.Properties.Lang[exportLang], props.Text{
 					Style: consts.Bold,
 					Align: consts.Left,
@@ -158,6 +158,9 @@ func (create CreatePdfProtocol) buildMenuBlock2(m pdf.Maroto, exportConfig model
 func (create CreatePdfProtocol) buildDishGroupBlock(m pdf.Maroto, dishGroup models.DishGroup, exportConfig models.ExportConfig) {
 	create.buildMenuBlock3(m, dishGroup.Name, exportConfig)
 	for _, dish := range dishGroup.Dishes {
+		if len(dish.Name) == 0 {
+			continue
+		}
 		create.buildMenuBlock4(m, dish.ToString())
 	}
 }
@@ -177,6 +180,9 @@ func (create CreatePdfProtocol) buildMenuBlock5(m pdf.Maroto, exportConfig model
 func (create CreatePdfProtocol) buildSideDishGroupBlock(m pdf.Maroto, sideDishGroup models.SideDishGroup, exportConfig models.ExportConfig) {
 	create.buildMenuBlock6(m, sideDishGroup.Name, exportConfig)
 	for _, sideDish := range sideDishGroup.SideDishes {
+		if len(sideDish.Name) == 0 {
+			continue
+		}
 		create.buildMenuBlock7(m, sideDish.ToString())
 	}
 }
