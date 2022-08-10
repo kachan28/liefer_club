@@ -116,3 +116,51 @@ func (f FileService) GetExportDirectory() (string, error) {
 func (f FileService) SetFullExportFilename(folderPath, fileName string) string {
 	return filepath.Join(folderPath, fileName) + pdfFormat
 }
+
+func (f FileService) GetFileCreateDts() ([]string, error) {
+	dts := make([]string, 0)
+	currPath, err := os.Getwd()
+	if err != nil {
+		return nil, err
+	}
+	files, err := ioutil.ReadDir(filepath.Join(currPath, protokolPath))
+	if err != nil {
+		return nil, err
+	}
+	if len(files) == 0 {
+		fmt.Println("no dumps")
+		return nil, nil
+	}
+	for _, file := range files {
+		fileName := file.Name()
+		dateTimeAndFormat := strings.Split(fileName, ",")
+		dts = append(dts, strings.Split(dateTimeAndFormat[1], jsonFormat)[0])
+	}
+	return dts, nil
+}
+
+func (f FileService) GetDumpsDts() (map[time.Time]string, error) {
+	dts := make(map[time.Time]string, 0)
+	currPath, err := os.Getwd()
+	if err != nil {
+		return nil, err
+	}
+	files, err := ioutil.ReadDir(filepath.Join(currPath, protokolPath))
+	if err != nil {
+		return nil, err
+	}
+	if len(files) == 0 {
+		fmt.Println("no dumps")
+		return nil, nil
+	}
+	for _, file := range files {
+		fileName := file.Name()
+		dateTimeAndFormat := strings.Split(fileName, ",")
+		dateTime, err := timeService.TimeService{}.GetTimeFromFileTitle(strings.Split(dateTimeAndFormat[1], jsonFormat)[0])
+		if err != nil {
+			return nil, err
+		}
+		dts[dateTime] = fileName
+	}
+	return dts, nil
+}

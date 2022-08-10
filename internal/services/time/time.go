@@ -5,10 +5,12 @@ import (
 )
 
 const (
-	formatForProtocol = "2006-01-02 15:04:05"
-	formatForFile     = "2006.01.02_15-04-05"
-	formatForExport   = "15:04:05 02.01.2006"
-	formatForCsv      = "2006.01.02_15-04-05"
+	formatForProtocol      = "2006-01-02 15:04:05"
+	formatForFile          = "2006.01.02_15-04-05"
+	formatForExport        = "15:04:05 02.01.2006"
+	formatForCsv           = "2006.01.02_15-04-05"
+	formatForInputOnlyDate = "2006.01.02"
+	formatForInput         = "2006.01.02_15-04-05"
 )
 
 type TimeService struct{}
@@ -47,4 +49,24 @@ func (t TimeService) GetUpdateDatabaseDtFromCsv(creationTime string) (time.Time,
 		return time.Time{}, err
 	}
 	return dbUpdateDt, nil
+}
+
+func (t TimeService) GetExportDateFromInput(date string) (time.Time, error) {
+	exportDt, err := time.Parse(formatForInputOnlyDate, date)
+	if err != nil {
+		return time.Time{}, err
+	}
+	return exportDt, err
+}
+
+func (t TimeService) GetExportDateTimeFromInput(date, etime string) (time.Time, error) {
+	exportDt, err := time.Parse(formatForInput, date+"_"+etime)
+	if err != nil {
+		return time.Time{}, err
+	}
+	return exportDt, nil
+}
+
+func (t TimeService) IsDateEqual(t1, t2 time.Time) bool {
+	return t1.Day() == t2.Day() && t1.Month() == t2.Month() && t1.Year() == t1.Year()
 }

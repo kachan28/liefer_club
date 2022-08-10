@@ -11,6 +11,10 @@ import (
 const (
 	pdf  = "pdf"
 	json = "json"
+
+	langFlag     = "l"
+	dumpDateFlag = "date"
+	dumpTimeFlag = "time"
 )
 
 func Export() *cobra.Command {
@@ -18,27 +22,31 @@ func Export() *cobra.Command {
 		Use:   "export",
 		Short: "export all changes in database",
 		Run: func(cmd *cobra.Command, args []string) {
-			exportLang, _ := cmd.Flags().GetString("l")
+			exportLang, _ := cmd.Flags().GetString(langFlag)
 			if exportLang == "" {
 				log.Fatal("please specify export language")
 			}
-			runExport(args, exportLang)
+			dumpDate, _ := cmd.Flags().GetString(dumpDateFlag)
+			dumpTime, _ := cmd.Flags().GetString(dumpTimeFlag)
+			runExport(args, exportLang, dumpDate, dumpTime)
 		},
 	}
 
-	protocolCommand.PersistentFlags().String("l", "", "select lang")
+	protocolCommand.PersistentFlags().String(langFlag, "", "select lang")
+	protocolCommand.PersistentFlags().String(dumpDateFlag, "", "select date of dump")
+	protocolCommand.PersistentFlags().String(dumpTimeFlag, "", "select time of dump")
 
 	return protocolCommand
 }
 
-func runExport(args []string, exportLang string) {
+func runExport(args []string, exportLang string, date string, time string) {
 	if len(args) == 0 {
 		log.Fatal("please enter formats for export")
 	}
 	for _, arg := range args {
 		if arg == pdf {
 			fmt.Printf("export run to %s \n", arg)
-			err := export.ExportService{}.ExportToPdf(exportLang)
+			err := export.ExportService{}.ExportToPdf(exportLang, date, time)
 			if err != nil {
 				log.Fatalf("can't export to pdf with err: %v", err)
 			}
