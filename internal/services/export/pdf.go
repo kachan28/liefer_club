@@ -159,7 +159,7 @@ func (create CreatePdfProtocol) buildDishGroupBlock(m pdf.Maroto, dishGroup mode
 		if len(dish.Name) == 0 {
 			continue
 		}
-		create.buildMenuBlock4(m, dish.ToString())
+		create.buildMenuBlock4(m, dish.ToString(exportConfig))
 	}
 }
 
@@ -181,7 +181,7 @@ func (create CreatePdfProtocol) buildSideDishGroupBlock(m pdf.Maroto, sideDishGr
 		if len(sideDish.Name) == 0 {
 			continue
 		}
-		create.buildMenuBlock7(m, sideDish.ToString())
+		create.buildMenuBlock7(m, sideDish.ToString(exportConfig))
 	}
 }
 

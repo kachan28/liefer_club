@@ -80,10 +80,6 @@ func (p *protocolService) MakeProtocol(conf *app.Conf) error {
 			}
 		}
 		if strings.Contains(dbName.Name, menuDBName) {
-			_, _, err := file.FileService{}.GetLastProtocol()
-			if err != nil {
-				return err
-			}
 			menu, err := menuService.GetMenuService{}.GetMenu(dbName.Name, conf)
 			if err != nil {
 				return err

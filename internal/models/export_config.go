@@ -1,6 +1,7 @@
 package models
 
 type ExportConfig struct {
+	Currency string         `json:"&curren"`
 	Sections SectionsConfig `json:"sections"`
 }
 

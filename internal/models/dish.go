@@ -26,20 +26,19 @@ type DishPrice struct {
 	BottleDepositFee *float64 `json:"bottle deposit fee,omitempty"`
 }
 
-func (d Dish) ToString() string {
-	return fmt.Sprintf("%s: Nr. - %s; MwSt. - %d%%; Preis - %s", d.Name, d.Number, d.TaxValue, d.pricesToString())
+func (d Dish) ToString(conf ExportConfig) string {
+	return fmt.Sprintf("%s: Nr. - %s; MwSt. - %d%%; Preis - %s", d.Name, d.Number, d.TaxValue, d.pricesToString(conf))
 }
 
-func (d Dish) pricesToString() string {
+func (d Dish) pricesToString(conf ExportConfig) string {
 	pricesString := ""
 	for _, price := range d.DishPrices {
 		if price.SizeOrPackage != nil {
 			pricesString += *price.SizeOrPackage + " - "
 		}
-		pricesString += fmt.Sprintf("%.2f€", *price.Price)
-		pricesString += ", "
+		pricesString += fmt.Sprintf("%.2f%s, ", *price.Price, conf.Currency)
 		if price.BottleDepositFee != nil && *price.BottleDepositFee != 0 {
-			pricesString += fmt.Sprintf("Pfand - %.2f; ", *price.BottleDepositFee)
+			pricesString += fmt.Sprintf("Pfand - %.2f%s; ", *price.BottleDepositFee, conf.Currency)
 		}
 	}
 	return pricesString

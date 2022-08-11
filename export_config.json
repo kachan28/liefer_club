@@ -4,6 +4,7 @@
   "title": "Programming protocol report template",
   "description": "Template for making the programming protocol dump-report in PDF-format from dump-report in JSON-format",
   "type": "object",
+  "&curren": "€",
   "sections": {
     "header section": {
       "header-block-1": {
